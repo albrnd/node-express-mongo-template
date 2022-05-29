@@ -7,14 +7,15 @@
     "build": "yarn compile",
     "clean": "./node_modules/rimraf/bin.js dist",
     "code:check": "npm-run-all -c -n code:lint 'code:format --check'",
-    "code:clean": "npm-run-all -c -n 'code:lint --fix' 'code:format --loglevel warn --write'",
+    "code:clean": "yarn code:lint --fix && yarn code:format --loglevel warn --write",
     "code:format": "prettier \"./src\"",
-    "code:lint": "eslint --ext .js,.ts \"src/\" --cache",
+    "code:lint": "eslint \"src/\" --ext .js,.ts",
     "compile": "yarn clean && tsc -p tsconfig.build.json",
     "start": "yarn build && NODE_PATH=dist/ node ./dist/infra",
     "start:dev": "ts-node-dev --respawn --no-notify -r tsconfig-paths/register ./src/infra",
     "test": "jest",
-    "test:dev": "jest --watch"
+    "test:dev": "jest --watch",
+    "prepare": "husky install"
   },
   "author": "Maica Albarando",
   "license": "MIT",
@@ -39,12 +40,20 @@
     "eslint-plugin-import": "^2.26.0",
     "eslint-plugin-jest": "^26.4.2",
     "eslint-plugin-prettier": "^4.0.0",
+    "husky": "^8.0.1",
     "jest": "^28.1.0",
+    "lint-staged": "^12.4.2",
     "nodemon": "^2.0.16",
+    "npm-run-all": "^4.1.5",
     "prettier": "^2.6.2",
     "rimraf": "^3.0.2",
     "ts-jest": "^28.0.3",
     "ts-node": "^10.8.0",
     "ts-node-dev": "^2.0.0"
+  },
+  "lint-staged": {
+    "src/**/*.{js,ts,tsx}": [
+      "yarn code:clean"
+    ]
   }
 }
