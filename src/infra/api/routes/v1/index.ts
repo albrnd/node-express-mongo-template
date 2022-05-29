@@ -2,6 +2,8 @@ import express from 'express';
 
 const router = express.Router();
 
-router.use('/', (req, res) => {  res.send('Welcome!'); })
+router.use('/', (req, res) => {
+  res.send('Welcome!');
+});
 
-export { router }
+export { router };

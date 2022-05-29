@@ -3,7 +3,7 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-import { app } from './api/app';
+import { app as expressApp } from './api/app';
 import { initDatabase } from 'infra/database/init';
 
 const { PORT = 3000 } = process.env;
@@ -17,7 +17,7 @@ const startServer = (app: express.Express) => {
 const run = async (): Promise<void> => {
   await initDatabase();
 
-  startServer(app);
+  startServer(expressApp);
 };
 
 run();

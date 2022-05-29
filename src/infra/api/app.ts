@@ -6,7 +6,7 @@ import { router as v1Router } from './routes/v1';
 
 const origin = {
   // TODO: Whitelist origin
-  origin: '*'
+  origin: '*',
 };
 
 const app = express();
@@ -22,5 +22,4 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use('/api/v1', v1Router);
 
-
-export { app }
+export { app };
