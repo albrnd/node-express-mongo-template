@@ -1,0 +1,49 @@
+version: "3.8"
+services:
+  server:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    image: foodist-server
+    container_name: app-foodist-server
+    command: yarn start
+    volumes:
+      - ./:/usr/src/app
+      - /usr/src/app/node_modules
+    ports:
+      - "4000:4000"
+    depends_on:
+      - postgres
+    networks:
+      - app-network
+  
+  mongo:
+    image: mongo:latest
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${DB_USER}
+      MONGO_INITDB_ROOT_PASSWORD: ${DB_PASSWORD}
+    ports:
+      - 27017:27017
+    volumes:
+      - mongodb_data_container:/data/db
+
+  postgres:
+    image: postgres:9.6.12-alpine
+    container_name: dev-postgres
+    volumes:
+      - "${DB_VOLUME_PATH}:/var/lib/postgresql/data"
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_DB=${DB_NAME}
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+    deploy:
+      restart_policy:
+        condition: on-failure
+        max_attempts: 3
+    networks:
+      - app-network
+
+volumes:
+  mongodb_data_container:
